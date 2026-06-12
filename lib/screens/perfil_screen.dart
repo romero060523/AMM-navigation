@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/usuario.dart';
 import '../theme/app_theme.dart';
 
@@ -8,75 +8,100 @@ class PerfilScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('MI PERFIL')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
+    return CupertinoPageScaffold(
+      backgroundColor: AppTheme.background,
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Mi Perfil'),
+        backgroundColor: CupertinoColors.systemBackground,
+      ),
+      child: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(0),
           children: [
-            // Avatar
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppTheme.primary,
-              child: Text(
-                usuario.nombre[0],
-                style: const TextStyle(
-                    fontSize: 40,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              usuario.nombre,
-              style: const TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppTheme.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                usuario.rol,
-                style: const TextStyle(
-                    color: AppTheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 32),
 
-            // Tarjeta de datos
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'INFORMACIÓN PERSONAL',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                          letterSpacing: 1.5),
+            // Avatar
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primary,
+                      borderRadius: BorderRadius.circular(45),
                     ),
-                    const Divider(height: 20),
-                    _buildInfoRow(Icons.email_outlined,  'Correo',    usuario.email),
-                    _buildInfoRow(Icons.cake_outlined,   'Edad',      '${usuario.edad} años'),
-                    _buildInfoRow(Icons.phone_outlined,  'Teléfono',  usuario.telefono),
-                    _buildInfoRow(Icons.badge_outlined,  'Rol',       usuario.rol),
-                  ],
-                ),
+                    child: Center(
+                      child: Text(
+                        usuario.nombre[0],
+                        style: const TextStyle(
+                            fontSize: 40,
+                            color: CupertinoColors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    usuario.nombre,
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.label),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primary.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      usuario.rol,
+                      style: const TextStyle(
+                          color: AppTheme.primary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            const SizedBox(height: 32),
+
+            // Sección datos
+            Padding(
+              padding: const EdgeInsets.only(left: 32, bottom: 6),
+              child: const Text(
+                'INFORMACIÓN PERSONAL',
+                style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.secondaryLabel,
+                    letterSpacing: 0.5),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  _buildInfoRow(CupertinoIcons.at,            'Correo',    usuario.email),
+                  _buildDivider(),
+                  _buildInfoRow(CupertinoIcons.textformat_123, 'Edad',     '${usuario.edad} años'),
+                  _buildDivider(),
+                  _buildInfoRow(CupertinoIcons.phone,          'Teléfono', usuario.telefono),
+                  _buildDivider(),
+                  _buildInfoRow(CupertinoIcons.shield,         'Rol',      usuario.rol),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -85,23 +110,28 @@ class PerfilScreen extends StatelessWidget {
 
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: AppTheme.primary),
+          Icon(icon, size: 18, color: AppTheme.primary),
           const SizedBox(width: 14),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey)),
-              Text(value,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w500)),
-            ],
-          ),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 15, color: AppTheme.secondaryLabel)),
+          const Spacer(),
+          Text(value,
+              style: const TextStyle(
+                  fontSize: 15,
+                  color: AppTheme.label,
+                  fontWeight: FontWeight.w500)),
         ],
       ),
     );
   }
+
+  Widget _buildDivider() => Container(
+        height: 0.5,
+        color: AppTheme.separator,
+        margin: const EdgeInsets.only(left: 48),
+      );
 }

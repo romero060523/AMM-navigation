@@ -1,45 +1,24 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppTheme {
-  // Colores principales
-  static const Color primary    = Color(0xFF1A3A6B);
-  static const Color success    = Color(0xFF2E7D32);
-  static const Color teal       = Color(0xFF00695C);
-  static const Color purple     = Color(0xFF6A1B9A);
-  static const Color danger     = Color(0xFFC62828);
-  static const Color background = Color(0xFFF4F6FA);
+  // Paleta estándar iOS
+  static const Color primary       = CupertinoColors.systemBlue;
+  static const Color success       = CupertinoColors.systemGreen;
+  static const Color danger        = CupertinoColors.systemRed;
+  static const Color purple        = CupertinoColors.systemPurple;
+  static const Color teal          = CupertinoColors.systemTeal;
+  static const Color background    = CupertinoColors.systemGroupedBackground;
+  static const Color secondaryBg   = CupertinoColors.secondarySystemGroupedBackground;
+  static const Color label         = CupertinoColors.label;
+  static const Color secondaryLabel = CupertinoColors.secondaryLabel;
+  static const Color separator     = CupertinoColors.separator;
 
-  static ThemeData get theme => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primary),
-        useMaterial3: true,
-        fontFamily: 'Georgia',
-        scaffoldBackgroundColor: background,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primary,
-          foregroundColor: Colors.white,
-          elevation: 2,
-          centerTitle: true,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primary,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 14),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: primary, width: 2),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        ),
-      );
+  static const CupertinoThemeData theme = CupertinoThemeData(
+    brightness: Brightness.light,
+    primaryColor: primary,
+    scaffoldBackgroundColor: background,
+    textTheme: CupertinoTextThemeData(
+      primaryColor: primary,
+    ),
+  );
 }

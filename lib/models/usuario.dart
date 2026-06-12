@@ -14,10 +14,9 @@ class Usuario {
   });
 }
 
-// Credenciales de prueba
 const usuarioPrueba = Usuario(
   nombre: 'Andy Romero Poma',
-  email: 'andy@escuela.edu',
+  email: 'andy@tecsup.edu',
   edad: '20',
   telefono: '+51 987 654 321',
   rol: 'Administrador',

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/usuario.dart';
 import '../theme/app_theme.dart';
 import 'menu_screen.dart';
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email == usuarioPrueba.email && pass == passwordPrueba) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
+        CupertinoPageRoute(
           builder: (_) => MenuScreen(usuario: usuarioPrueba),
         ),
       );
@@ -34,110 +34,145 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Ícono institucional
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: AppTheme.primary,
-                  borderRadius: BorderRadius.circular(20),
+    return CupertinoPageScaffold(
+      backgroundColor: AppTheme.background,
+      child: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Ícono institucional
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    CupertinoIcons.book_fill,
+                    color: CupertinoColors.white,
+                    size: 40,
+                  ),
                 ),
-                child: const Icon(Icons.school, color: Colors.white, size: 44),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'SISTEMA ESCOLAR',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.primary,
-                  letterSpacing: 2,
+                const SizedBox(height: 16),
+                const Text(
+                  'SISTEMA ESCOLAR',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primary,
+                    letterSpacing: 1.5,
+                  ),
                 ),
-              ),
-              const Text(
-                'Ingresa tus credenciales',
-                style: TextStyle(fontSize: 13, color: Colors.grey),
-              ),
-              const SizedBox(height: 36),
+                const SizedBox(height: 4),
+                const Text(
+                  'Ingresa tus credenciales',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.secondaryLabel,
+                  ),
+                ),
+                const SizedBox(height: 36),
 
-              // Formulario
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
+                // Formulario estilo iOS (fondo blanco, bordes redondeados)
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppTheme.secondaryBg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text('Correo electrónico',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _emailCtrl,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          hintText: 'ejemplo@correo.com',
-                          prefixIcon: Icon(Icons.email_outlined),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text('Contraseña',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _passCtrl,
-                        obscureText: _obscure,
-                        decoration: InputDecoration(
-                          hintText: '••••••••',
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscure
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () =>
-                                setState(() => _obscure = !_obscure),
+                      // Campo email
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        child: CupertinoTextField(
+                          controller: _emailCtrl,
+                          placeholder: 'Correo electrónico',
+                          keyboardType: TextInputType.emailAddress,
+                          prefix: const Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Icon(CupertinoIcons.at,
+                                color: AppTheme.secondaryLabel, size: 18),
                           ),
+                          decoration: const BoxDecoration(),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 14, horizontal: 8),
                         ),
                       ),
-                      if (_error != null) ...[
-                        const SizedBox(height: 10),
-                        Text(_error!,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 12)),
-                      ],
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _login,
-                          child: const Text('INICIAR SESIÓN',
-                              style: TextStyle(
-                                  letterSpacing: 1.5,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Center(
-                        child: Text(
-                          'Demo: andy@escuela.edu / 1234',
-                          style: TextStyle(fontSize: 11, color: Colors.grey),
+                      Container(height: 0.5, color: AppTheme.separator,
+                          margin: const EdgeInsets.only(left: 44)),
+                      // Campo contraseña
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        child: CupertinoTextField(
+                          controller: _passCtrl,
+                          placeholder: 'Contraseña',
+                          obscureText: _obscure,
+                          prefix: const Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Icon(CupertinoIcons.lock,
+                                color: AppTheme.secondaryLabel, size: 18),
+                          ),
+                          suffix: GestureDetector(
+                            onTap: () => setState(() => _obscure = !_obscure),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Icon(
+                                _obscure
+                                    ? CupertinoIcons.eye_slash
+                                    : CupertinoIcons.eye,
+                                color: AppTheme.secondaryLabel,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                          decoration: const BoxDecoration(),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 14, horizontal: 8),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+
+                // Error
+                if (_error != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    _error!,
+                    style: const TextStyle(
+                        color: AppTheme.danger, fontSize: 13),
+                  ),
+                ],
+
+                const SizedBox(height: 24),
+
+                // Botón login
+                SizedBox(
+                  width: double.infinity,
+                  child: CupertinoButton.filled(
+                    borderRadius: BorderRadius.circular(12),
+                    onPressed: _login,
+                    child: const Text(
+                      'Iniciar Sesión',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+                const Text(
+                  'Demo: andy@tecsup.edu / 1234',
+                  style: TextStyle(
+                      fontSize: 12, color: AppTheme.secondaryLabel),
+                ),
+              ],
+            ),
           ),
         ),
       ),

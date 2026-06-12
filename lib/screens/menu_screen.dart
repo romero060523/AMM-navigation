@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/usuario.dart';
 import '../theme/app_theme.dart';
 import 'login_screen.dart';
@@ -11,152 +11,224 @@ class MenuScreen extends StatelessWidget {
   final Usuario usuario;
   const MenuScreen({super.key, required this.usuario});
 
-  @override
-  Widget build(BuildContext context) {
-    final opciones = [
-      _MenuOpcion(
-        icon: Icons.person_outline,
-        titulo: 'Perfil',
-        subtitulo: 'Ver mis datos',
-        color: AppTheme.primary,
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => PerfilScreen(usuario: usuario))),
-      ),
-      _MenuOpcion(
-        icon: Icons.person_add_outlined,
-        titulo: 'Registrar Alumno',
-        subtitulo: 'Agregar nuevo alumno',
-        color: AppTheme.success,
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const RegistrarAlumnoScreen())),
-      ),
-      _MenuOpcion(
-        icon: Icons.list_alt_outlined,
-        titulo: 'Listar Alumnos',
-        subtitulo: 'Ver todos los alumnos',
-        color: AppTheme.teal,
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const ListarAlumnosScreen())),
-      ),
-      _MenuOpcion(
-        icon: Icons.help_outline,
-        titulo: 'Preguntas Frecuentes',
-        subtitulo: 'Ayuda e información',
-        color: AppTheme.purple,
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const PreguntasFrecuentesScreen())),
-      ),
-      _MenuOpcion(
-        icon: Icons.logout,
-        titulo: 'Cerrar Sesión',
-        subtitulo: 'Salir del sistema',
-        color: AppTheme.danger,
-        onTap: () => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (_) => false,
-        ),
-      ),
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MENÚ PRINCIPAL'),
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: [
-          // Bienvenida
-          Container(
-            width: double.infinity,
-            color: AppTheme.primary.withOpacity(0.07),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: AppTheme.primary,
-                  radius: 22,
-                  child: Text(
-                    usuario.nombre[0],
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Bienvenido,',
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey[600])),
-                    Text(usuario.nombre,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ],
+  void _cerrarSesion(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('Cerrar Sesión'),
+        content: const Text('¿Estás seguro que deseas salir?'),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pushAndRemoveUntil(
+              context,
+              CupertinoPageRoute(builder: (_) => const LoginScreen()),
+              (_) => false,
             ),
+            child: const Text('Salir'),
           ),
-          // Lista de opciones
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: opciones.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
-              itemBuilder: (_, i) => _buildMenuCard(opciones[i]),
-            ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMenuCard(_MenuOpcion op) {
-    return Card(
-      elevation: 2,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        leading: Container(
-          width: 46,
-          height: 46,
-          decoration: BoxDecoration(
-            color: op.color.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(op.icon, color: op.color, size: 24),
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: AppTheme.background,
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Menú Principal'),
+        backgroundColor: CupertinoColors.systemBackground,
+      ),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            // Bienvenida
+            Container(
+              color: AppTheme.secondaryBg,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primary,
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: Center(
+                      child: Text(
+                        usuario.nombre[0],
+                        style: const TextStyle(
+                            color: CupertinoColors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Bienvenido',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: AppTheme.secondaryLabel)),
+                      Text(usuario.nombre,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.label)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Sección opciones
+            _buildSectionLabel('OPCIONES'),
+            Container(
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  _buildRow(
+                    context,
+                    icon: CupertinoIcons.person_alt_circle,
+                    color: AppTheme.primary,
+                    titulo: 'Perfil',
+                    onTap: () => Navigator.push(context,
+                        CupertinoPageRoute(
+                            builder: (_) => PerfilScreen(usuario: usuario))),
+                  ),
+                  _buildDivider(),
+                  _buildRow(
+                    context,
+                    icon: CupertinoIcons.person_add,
+                    color: AppTheme.success,
+                    titulo: 'Registrar Alumno',
+                    onTap: () => Navigator.push(context,
+                        CupertinoPageRoute(
+                            builder: (_) => const RegistrarAlumnoScreen())),
+                  ),
+                  _buildDivider(),
+                  _buildRow(
+                    context,
+                    icon: CupertinoIcons.book,
+                    color: AppTheme.teal,
+                    titulo: 'Listar Alumnos',
+                    onTap: () => Navigator.push(context,
+                        CupertinoPageRoute(
+                            builder: (_) => const ListarAlumnosScreen())),
+                  ),
+                  _buildDivider(),
+                  _buildRow(
+                    context,
+                    icon: CupertinoIcons.chat_bubble,
+                    color: AppTheme.purple,
+                    titulo: 'Preguntas Frecuentes',
+                    onTap: () => Navigator.push(context,
+                        CupertinoPageRoute(
+                            builder: (_) =>
+                                const PreguntasFrecuentesScreen())),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Cerrar sesión separado (rojo, estilo iOS)
+            _buildSectionLabel('CUENTA'),
+            Container(
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildRow(
+                context,
+                icon: CupertinoIcons.clear_circled,
+                color: AppTheme.danger,
+                titulo: 'Cerrar Sesión',
+                textColor: AppTheme.danger,
+                showChevron: false,
+                onTap: () => _cerrarSesion(context),
+              ),
+            ),
+
+            const SizedBox(height: 32),
+          ],
         ),
-        title: Text(op.titulo,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(op.subtitulo,
-            style: const TextStyle(fontSize: 12, color: Colors.grey)),
-        trailing: Icon(Icons.chevron_right, color: Colors.grey[400]),
-        onTap: op.onTap,
       ),
     );
   }
-}
 
-class _MenuOpcion {
-  final IconData icon;
-  final String titulo;
-  final String subtitulo;
-  final Color color;
-  final VoidCallback onTap;
+  Widget _buildSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 32, bottom: 6),
+      child: Text(
+        label,
+        style: const TextStyle(
+            fontSize: 12,
+            color: AppTheme.secondaryLabel,
+            letterSpacing: 0.5),
+      ),
+    );
+  }
 
-  const _MenuOpcion({
-    required this.icon,
-    required this.titulo,
-    required this.subtitulo,
-    required this.color,
-    required this.onTap,
-  });
+  Widget _buildRow(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String titulo,
+    required VoidCallback onTap,
+    Color textColor = AppTheme.label,
+    bool showChevron = true,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Icon(icon, color: CupertinoColors.white, size: 17),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(titulo,
+                  style: TextStyle(fontSize: 16, color: textColor)),
+            ),
+            if (showChevron)
+              const Icon(CupertinoIcons.chevron_forward,
+                  color: AppTheme.secondaryLabel, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDivider() => Container(
+        height: 0.5,
+        color: AppTheme.separator,
+        margin: const EdgeInsets.only(left: 60),
+      );
 }

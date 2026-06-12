@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
 
@@ -9,7 +9,7 @@ class AppEscolar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Sistema Escolar',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
